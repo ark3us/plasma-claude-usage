@@ -1,10 +1,12 @@
 import QtQuick
+import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasma5support as Plasma5Support
 import org.kde.plasma.core as PlasmaCore
+import "accountSwitching.js" as AccountSwitching
 
 PlasmoidItem {
     id: root
@@ -27,6 +29,13 @@ PlasmoidItem {
     property string accessToken: ""
     property string apiKey: ""
     property string baseUrl: ""
+    property var accountSwitchAccounts: []
+    property int accountSwitchActiveIndex: -1
+    property string accountSwitchError: ""
+    property bool accountSwitchLoading: false
+    property bool accountSwitching: false
+    property bool accountAdding: false
+    property string accountSwitchStatus: ""
     property bool isLoading: false
     property var sessionResetTime: null
     property var weeklyResetTime: null
@@ -242,6 +251,134 @@ PlasmoidItem {
             disconnectSource(sourceName)
             console.log("Claude Usage: Terminal launched")
         }
+    }
+
+    Plasma5Support.DataSource {
+        id: accountSwitchListReader
+        engine: "executable"
+        connectedSources: []
+
+        onNewData: function(sourceName, data) {
+            var output = ((data["stdout"] || "") + "\n" + (data["stderr"] || "")).trim()
+            disconnectSource(sourceName)
+            root.accountSwitchLoading = false
+
+            var accounts = AccountSwitching.parseCswapList(output)
+            root.accountSwitchAccounts = accounts
+            root.accountSwitchActiveIndex = -1
+            for (var i = 0; i < accounts.length; i++) {
+                if (accounts[i].active) {
+                    root.accountSwitchActiveIndex = i
+                    break
+                }
+            }
+
+            if (accounts.length === 0) {
+                root.accountSwitchError = output || i18n.tr("No accounts found")
+            } else {
+                root.accountSwitchError = ""
+            }
+        }
+    }
+
+    Plasma5Support.DataSource {
+        id: accountSwitcher
+        engine: "executable"
+        connectedSources: []
+
+        onNewData: function(sourceName, data) {
+            var output = ((data["stdout"] || "") + "\n" + (data["stderr"] || "")).trim()
+            disconnectSource(sourceName)
+            root.accountSwitching = false
+
+            if (output.indexOf("Error:") >= 0) {
+                root.accountSwitchError = output
+                loadAccountSwitchAccounts()
+                return
+            }
+
+            root.accountSwitchError = ""
+            root.hasTokenError = false
+            root.hasRateLimitError = false
+            root.lastFetchTime = 0
+            loadAccountSwitchAccounts()
+            refresh()
+        }
+    }
+
+    Plasma5Support.DataSource {
+        id: accountAdder
+        engine: "executable"
+        connectedSources: []
+
+        onNewData: function(sourceName, data) {
+            var output = ((data["stdout"] || "") + "\n" + (data["stderr"] || "")).trim()
+            disconnectSource(sourceName)
+            root.accountAdding = false
+
+            if (output.indexOf("Error:") >= 0) {
+                root.accountSwitchError = output
+                loadAccountSwitchAccounts()
+                return
+            }
+
+            root.accountSwitchError = ""
+            root.accountSwitchStatus = i18n.tr("Account added")
+            loadAccountSwitchAccounts()
+        }
+    }
+
+    function getAccountSwitchCommand() {
+        var command = (Plasmoid.configuration.accountSwitchCommand || "cswap").trim()
+        return command || "cswap"
+    }
+
+    function loadAccountSwitchAccounts() {
+        if ((Plasmoid.configuration.baseUrl || "").trim()) {
+            return
+        }
+
+        root.accountSwitchLoading = true
+        root.accountSwitchError = ""
+        accountSwitchListReader.connectSource("printf 'n\\n' | " + getAccountSwitchCommand() + " --list 2>&1")
+    }
+
+    function switchAccount(accountId) {
+        if (!accountId || root.accountSwitching) {
+            return
+        }
+
+        root.accountSwitching = true
+        root.accountSwitchError = ""
+        root.accountSwitchStatus = ""
+        accountSwitcher.connectSource(getAccountSwitchCommand() + " --switch-to " + AccountSwitching.shellQuote(accountId) + " 2>&1")
+    }
+
+    function addCurrentAccount() {
+        if (root.accountAdding || root.accountSwitching || root.accountSwitchLoading) {
+            return
+        }
+
+        root.accountAdding = true
+        root.accountSwitchError = ""
+        root.accountSwitchStatus = ""
+        accountAdder.connectSource(getAccountSwitchCommand() + " --add-account 2>&1")
+    }
+
+    function launchTerminalCommand(command) {
+        var quotedCommand = AccountSwitching.shellQuote(command)
+        var script = "cd $HOME && if command -v konsole >/dev/null; then konsole --hold -e bash -lc " + quotedCommand
+            + "; elif command -v gnome-terminal >/dev/null; then gnome-terminal -- bash -lc " + quotedCommand
+            + "; elif command -v xfce4-terminal >/dev/null; then xfce4-terminal --hold -e bash -lc " + quotedCommand
+            + "; elif command -v xterm >/dev/null; then xterm -hold -e bash -lc " + quotedCommand
+            + "; fi &"
+        claudeLauncher.connectSource("bash -c " + AccountSwitching.shellQuote(script))
+    }
+
+    function loginAndAddAccount() {
+        root.accountSwitchError = ""
+        root.accountSwitchStatus = i18n.tr("Finish login, then refresh accounts")
+        launchTerminalCommand(AccountSwitching.buildLoginAndAddCommand(getAccountSwitchCommand()))
     }
 
     function loadCredentials() {
@@ -701,9 +838,9 @@ PlasmoidItem {
     // Full representation (popup)
     fullRepresentation: Item {
         Layout.minimumWidth: Kirigami.Units.gridUnit * 14
-        Layout.minimumHeight: Kirigami.Units.gridUnit * 16
+        Layout.minimumHeight: Kirigami.Units.gridUnit * 18
         Layout.preferredWidth: Kirigami.Units.gridUnit * 16
-        Layout.preferredHeight: Kirigami.Units.gridUnit * 18
+        Layout.preferredHeight: Kirigami.Units.gridUnit * 20
 
         ColumnLayout {
             anchors.fill: parent
@@ -714,7 +851,7 @@ PlasmoidItem {
             RowLayout {
                 Layout.fillWidth: true
                 PlasmaComponents.Label {
-                    text: i18n.tr("Claude Usage")
+                    text: i18n.tr("Claude Account Usage")
                     font.bold: true
                     font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.3
                 }
@@ -731,6 +868,78 @@ PlasmoidItem {
                         font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                         color: Kirigami.Theme.highlightedTextColor
                     }
+                }
+            }
+
+            ColumnLayout {
+                visible: (Plasmoid.configuration.baseUrl || "").trim() === ""
+                Layout.fillWidth: true
+                spacing: Kirigami.Units.smallSpacing
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    PlasmaComponents.Label {
+                        text: i18n.tr("Account:")
+                        font.bold: true
+                    }
+
+                    QQC2.ComboBox {
+                        Layout.fillWidth: true
+                        enabled: !root.accountSwitchLoading && !root.accountSwitching && !root.accountAdding && root.accountSwitchAccounts.length > 0
+                        model: root.accountSwitchAccounts
+                        textRole: "label"
+                        currentIndex: root.accountSwitchActiveIndex
+                        onActivated: function(index) {
+                            if (index < 0 || index >= root.accountSwitchAccounts.length) {
+                                return
+                            }
+                            if (!root.accountSwitchAccounts[index].active) {
+                                root.switchAccount(root.accountSwitchAccounts[index].id)
+                            }
+                        }
+                    }
+
+                    PlasmaComponents.Button {
+                        icon.name: "view-refresh"
+                        enabled: !root.accountSwitchLoading && !root.accountSwitching && !root.accountAdding
+                        onClicked: root.loadAccountSwitchAccounts()
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    PlasmaComponents.Button {
+                        icon.name: "list-add"
+                        text: i18n.tr("Add current")
+                        enabled: !root.accountSwitchLoading && !root.accountSwitching && !root.accountAdding
+                        onClicked: root.addCurrentAccount()
+                    }
+
+                    PlasmaComponents.Button {
+                        icon.name: "utilities-terminal"
+                        text: i18n.tr("Login & add")
+                        enabled: !root.accountSwitchLoading && !root.accountSwitching && !root.accountAdding
+                        onClicked: root.loginAndAddAccount()
+                    }
+                }
+
+                PlasmaComponents.Label {
+                    visible: root.accountSwitchLoading || root.accountSwitching || root.accountAdding || root.accountSwitchError !== "" || root.accountSwitchStatus !== ""
+                    text: root.accountAdding
+                        ? i18n.tr("Adding account...")
+                        : root.accountSwitching
+                        ? i18n.tr("Switching account...")
+                        : root.accountSwitchLoading
+                            ? i18n.tr("Loading accounts...")
+                            : root.accountSwitchError !== ""
+                                ? root.accountSwitchError
+                                : root.accountSwitchStatus
+                    color: root.accountSwitchError !== "" ? Kirigami.Theme.negativeTextColor : Kirigami.Theme.disabledTextColor
+                    font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                    elide: Text.ElideRight
+                    Layout.fillWidth: true
                 }
             }
 
@@ -786,7 +995,7 @@ PlasmoidItem {
                         text: i18n.tr("Open Claude")
                         icon.name: "utilities-terminal"
                         onClicked: {
-                            claudeLauncher.connectSource("bash -c 'cd $HOME && if command -v konsole >/dev/null; then konsole --hold -e env -u CLAUDECODE bash -lc claude; elif command -v gnome-terminal >/dev/null; then gnome-terminal -- env -u CLAUDECODE bash -lc \"claude; exec bash\"; elif command -v xfce4-terminal >/dev/null; then xfce4-terminal --hold -e \"env -u CLAUDECODE bash -lc claude\"; elif command -v xterm >/dev/null; then xterm -hold -e env -u CLAUDECODE bash -lc claude; fi &'")
+                            root.launchTerminalCommand("env -u CLAUDECODE claude")
                         }
                     }
                 }
@@ -1128,6 +1337,7 @@ PlasmoidItem {
         iconInstaller.connectSource("bash -c 'ICON_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/icons/hicolor/scalable/apps && mkdir -p $ICON_DIR && cp \"" + iconSource + "\" $ICON_DIR/claude-usage-widget.svg && chmod 644 $ICON_DIR/claude-usage-widget.svg 2>/dev/null'")
         cacheReader.connectSource("cat $HOME/.local/share/claude-usage-cache.json 2>/dev/null")
         versionReader.connectSource("claude --version 2>/dev/null")
+        loadAccountSwitchAccounts()
         loadCredentials()
     }
 
@@ -1149,7 +1359,7 @@ PlasmoidItem {
     }
 
     Plasmoid.icon: "claude-usage-widget"
-    toolTipMainText: i18n.tr("Claude Usage")
+    toolTipMainText: i18n.tr("Claude Account Usage")
     toolTipSubText: {
         var parts = []
         if (Plasmoid.configuration.showSession !== false)

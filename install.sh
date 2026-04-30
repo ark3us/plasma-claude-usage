@@ -1,10 +1,10 @@
 #!/bin/bash
 
-PLUGIN_ID="org.kde.plasma.claudeusage"
+PLUGIN_ID="org.kde.plasma.claudeaccountusage"
 INSTALL_DIR="$HOME/.local/share/plasma/plasmoids/$PLUGIN_ID"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-echo "Installing Claude Usage widget..."
+echo "Installing Claude Account Usage widget..."
 
 mkdir -p "$INSTALL_DIR"
 cp -r "$SCRIPT_DIR/contents" "$INSTALL_DIR/"

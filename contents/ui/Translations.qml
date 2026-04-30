@@ -17,6 +17,7 @@ QtObject {
 
     readonly property var strings: ({
         "en_US": {
+            "Claude Account Usage": "Claude Account Usage",
             "Claude Usage": "Claude Usage",
             "Session (5hr)": "Session (5hr)",
             "Weekly (7day)": "Weekly (7day)",
@@ -63,7 +64,19 @@ QtObject {
             "Layout:": "Layout:",
             "Horizontal": "Horizontal",
             "Vertical": "Vertical",
-            "Background opacity (desktop):": "Background opacity (desktop):"
+            "Background opacity (desktop):": "Background opacity (desktop):",
+            "Account:": "Account:",
+            "Loading accounts...": "Loading accounts...",
+            "Switching account...": "Switching account...",
+            "No accounts found": "No accounts found",
+            "Add current": "Add current",
+            "Login & add": "Login & add",
+            "Adding account...": "Adding account...",
+            "Account added": "Account added",
+            "Finish login, then refresh accounts": "Finish login, then refresh accounts",
+            "Account switching": "Account switching",
+            "Command:": "Command:",
+            "Used for cswap-compatible account switching": "Used for cswap-compatible account switching"
         },
         "hu_HU": {
             "Claude Usage": "Claude használat",
@@ -262,6 +275,7 @@ QtObject {
             "Background opacity (desktop):": "Opacidad del fondo (escritorio):"
         },
         "it_IT": {
+            "Claude Account Usage": "Claude Account Usage",
             "Claude Usage": "Utilizzo Claude",
             "Session (5hr)": "Sessione (5h)",
             "Weekly (7day)": "Settimanale (7gg)",
@@ -308,7 +322,19 @@ QtObject {
             "Layout:": "Disposizione:",
             "Horizontal": "Orizzontale",
             "Vertical": "Verticale",
-            "Background opacity (desktop):": "Opacità sfondo (desktop):"
+            "Background opacity (desktop):": "Opacità sfondo (desktop):",
+            "Account:": "Account:",
+            "Loading accounts...": "Caricamento account...",
+            "Switching account...": "Cambio account...",
+            "No accounts found": "Nessun account trovato",
+            "Add current": "Aggiungi corrente",
+            "Login & add": "Login e aggiungi",
+            "Adding account...": "Aggiunta account...",
+            "Account added": "Account aggiunto",
+            "Finish login, then refresh accounts": "Completa il login, poi aggiorna gli account",
+            "Account switching": "Cambio account",
+            "Command:": "Comando:",
+            "Used for cswap-compatible account switching": "Usato per il cambio account compatibile con cswap"
         },
         "pt_BR": {
             "Claude Usage": "Uso do Claude",

@@ -3,18 +3,23 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "izll"
+                "Name": "izll",
+                "Website": "https://github.com/izll/plasma-claude-usage"
+            },
+            {
+                "Name": "ark3us",
+                "Website": "https://github.com/ark3us/plasma-claude-usage"
             }
         ],
         "Category": "System Information",
-        "Description": "Display Claude Code usage statistics (session and weekly limits) in your taskbar. Shows real-time usage percentages with color-coded indicators.",
+        "Description": "Display Claude Code usage statistics and switch Claude accounts from your taskbar.",
         "EnabledByDefault": true,
         "Icon": "claude-usage-widget",
-        "Id": "org.kde.plasma.claudeusage",
+        "Id": "org.kde.plasma.claudeaccountusage",
         "License": "GPL-3.0-or-later",
-        "Name": "Claude Usage",
+        "Name": "Claude Account Usage",
         "Version": "1.3.6",
-        "Website": "https://github.com/izll/plasma-claude-usage"
+        "Website": "https://github.com/ark3us/plasma-claude-usage"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-Provides": []

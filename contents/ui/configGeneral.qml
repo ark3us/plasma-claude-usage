@@ -22,6 +22,7 @@ KCM.SimpleKCM {
     property bool cfg_showSonnet
     property string cfg_baseUrl
     property string cfg_apiKey
+    property string cfg_accountSwitchCommand
     property double cfg_backgroundOpacity
 
     // Translation helper
@@ -185,6 +186,27 @@ KCM.SimpleKCM {
             echoMode: TextInput.Password
             enabled: cfg_baseUrl !== ""
             onTextChanged: cfg_apiKey = text
+            Layout.fillWidth: true
+        }
+
+        Kirigami.Separator {
+            Kirigami.FormData.isSection: true
+            Kirigami.FormData.label: tr("Account switching")
+        }
+
+        QQC2.TextField {
+            id: accountSwitchCommandField
+            Kirigami.FormData.label: tr("Command:")
+            placeholderText: "cswap"
+            text: cfg_accountSwitchCommand
+            onTextChanged: cfg_accountSwitchCommand = text
+            Layout.fillWidth: true
+        }
+
+        QQC2.Label {
+            text: tr("Used for cswap-compatible account switching")
+            font.italic: true
+            opacity: 0.7
             Layout.fillWidth: true
         }
     }

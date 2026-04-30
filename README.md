@@ -1,6 +1,8 @@
-# Claude Usage Widget
+# Claude Account Usage Widget
 
-A KDE Plasma 6 widget that displays your Claude Code usage statistics in the taskbar.
+A KDE Plasma 6 widget that displays your Claude Code usage statistics and switches Claude accounts from the taskbar.
+
+Based on the original [plasma-claude-usage](https://github.com/izll/plasma-claude-usage) widget by izll, with optional account switching through [claude-swap](https://github.com/realiti4/claude-swap) by realiti4.
 
 ![Popup](screenshots/popup.png)
 
@@ -19,9 +21,10 @@ A KDE Plasma 6 widget that displays your Claude Code usage statistics in the tas
 - **Local Cache**: Remembers last data on restart (up to 24h)
 - **Stale Detection**: Widget dims when data is outdated
 - **Error Handling**: Clear messages when not logged in, token expired, or rate limited
+- **Account Switcher**: Optional popup selector for `cswap`/`claude-swap` managed accounts
 - **Custom API Support**: Optional proxy/gateway with custom base URL and API key
 - **15 Languages**: EN, HU, DE, FR, ES, IT, PT, RU, PL, NL, TR, JA, KO, ZH-CN, ZH-TW
-- **No Dependencies**: Pure QML, no Python or external tools required
+- **No Bundled Dependencies**: Pure QML; account switching uses an already-installed optional CLI
 
 ## Requirements
 
@@ -35,20 +38,20 @@ A KDE Plasma 6 widget that displays your Claude Code usage statistics in the tas
 1. Right-click on your panel
 2. Select "Add Widgets..."
 3. Click "Get New Widgets..." > "Download New Plasma Widgets..."
-4. Search for "Claude Usage"
+4. Search for "Claude Account Usage"
 5. Click Install
 
 ### Manual Installation
 
 ```bash
-kpackagetool6 -t Plasma/Applet -i claude-usage-widget.plasmoid
+kpackagetool6 -t Plasma/Applet -i claude-account-usage.plasmoid
 ```
 
 ### From Source
 
 ```bash
 git clone https://github.com/izll/plasma-claude-usage.git
-cd claude-usage-widget
+cd plasma-claude-usage
 kpackagetool6 -t Plasma/Applet -i .
 ```
 
@@ -76,6 +79,18 @@ If you use a custom API proxy or gateway, you can override this:
 > **Note:** The widget calls `/api/oauth/usage`, not the standard `/v1/messages` endpoint. Use the root URL without any path suffix — e.g. `https://api.anthropic.com`, not `https://api.anthropic.com/v1`.
 
 When a base URL is configured, the widget authenticates with `x-api-key` instead of the OAuth token. Leave the Base URL field empty to go back to the default credentials file method.
+
+### Account Switching (optional)
+
+If you manage multiple Claude Code accounts with `claude-swap`, the popup can switch between them directly. The widget assumes the `cswap` command is already installed and reads accounts with `cswap --list`, switches with `cswap --switch-to <account-number>`, and can save the currently logged-in account with `cswap --add-account`.
+
+The **Login & add** button opens a terminal and runs `claude auth login && cswap --add-account`, because Claude login is interactive. Finish the login in that terminal, then refresh the account selector.
+
+| Setting | Description |
+|---|---|
+| **Command** | Account switch command, default `cswap` |
+
+The selector is only shown in the default OAuth credentials mode. It is hidden when a custom API base URL is configured.
 
 ## How It Works
 
@@ -133,7 +148,7 @@ The base URL in the widget settings doesn't point to a valid API. Make sure you'
 ## File Structure
 
 ```
-claude-usage-widget/
+plasma-claude-usage/
 ├── metadata.json           # Widget metadata
 ├── install.sh              # Installation script
 ├── contents/
@@ -152,9 +167,11 @@ claude-usage-widget/
 
 GPL-3.0-or-later
 
-## Author
+## Credits
 
-izll
+- Original widget: [plasma-claude-usage](https://github.com/izll/plasma-claude-usage) by izll
+- Account switching integration uses the external [claude-swap](https://github.com/realiti4/claude-swap) CLI by realiti4
+- Claude Account Usage changes and account-switching UI: [ark3us](https://github.com/ark3us/plasma-claude-usage)
 
 ## Version History
 
