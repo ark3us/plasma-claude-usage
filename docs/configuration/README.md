@@ -61,7 +61,7 @@ sequenceDiagram
 | `showSonnet` | Bool | `false` | Panel metric visibility and tooltip |
 | `baseUrl` | String | empty | `contents/ui/main.qml:loadCredentials()` |
 | `apiKey` | String | empty | `contents/ui/main.qml:fetchUsageFromApi()` |
-| `accountSwitchCommand` | String | `cswap` | `contents/ui/main.qml:loadAccountSwitchAccounts()` |
+| `accountSwitchCommand` | String | empty | `contents/ui/main.qml:loadAccountSwitchAccounts()` |
 | `backgroundOpacity` | Double | `1.0` | Desktop-only background rectangle |
 
 ## Dependencies
@@ -73,7 +73,7 @@ sequenceDiagram
 
 - The settings UI warns when `refreshInterval < 5` because the API allows only a small number of requests per 5-minute window.
 - `apiKey` input is disabled until `baseUrl` is non-empty, matching runtime custom API mode.
-- `accountSwitchCommand` defaults to `cswap` and can point to a compatible wrapper command.
+- `accountSwitchCommand` is optional; empty settings auto-detect the installed `claude-swap` command, while a value points to a compatible wrapper command.
 - The runtime still validates missing `apiKey` and reports "API key not configured" because config UI cannot enforce all saved states.
 
 ## Related Documents

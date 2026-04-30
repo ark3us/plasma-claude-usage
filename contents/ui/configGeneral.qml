@@ -197,14 +197,14 @@ KCM.SimpleKCM {
         QQC2.TextField {
             id: accountSwitchCommandField
             Kirigami.FormData.label: tr("Command:")
-            placeholderText: "cswap"
+            placeholderText: "claude-swap"
             text: cfg_accountSwitchCommand
             onTextChanged: cfg_accountSwitchCommand = text
             Layout.fillWidth: true
         }
 
         QQC2.Label {
-            text: tr("Used for cswap-compatible account switching")
+            text: tr("Leave empty to auto-detect claude-swap")
             font.italic: true
             opacity: 0.7
             Layout.fillWidth: true

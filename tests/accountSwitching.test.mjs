@@ -58,3 +58,18 @@ test("buildLoginAndAddCommand chains Claude login and account add", () => {
         "claude auth login && cswap --add-account; echo; read -r -p 'Press Enter to close...'"
     );
 });
+
+test("buildCommandDetector prefers configured command when set", () => {
+    const { buildCommandDetector } = loadHelper();
+
+    assert.equal(buildCommandDetector("claude-swap"), "printf '%s' 'claude-swap'");
+});
+
+test("buildCommandDetector detects cswap then claude-swap by default", () => {
+    const { buildCommandDetector } = loadHelper();
+
+    assert.equal(
+        buildCommandDetector(""),
+        "if command -v cswap >/dev/null 2>&1; then printf '%s' 'cswap'; elif command -v claude-swap >/dev/null 2>&1; then printf '%s' 'claude-swap'; fi"
+    );
+});

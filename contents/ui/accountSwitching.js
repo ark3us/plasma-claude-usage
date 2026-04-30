@@ -38,3 +38,11 @@ function shellQuote(value) {
 function buildLoginAndAddCommand(accountSwitchCommand) {
     return "claude auth login && " + (accountSwitchCommand || "cswap") + " --add-account; echo; read -r -p 'Press Enter to close...'"
 }
+
+function buildCommandDetector(configuredCommand) {
+    var command = (configuredCommand || "").trim()
+    if (command) {
+        return "printf '%s' " + shellQuote(command)
+    }
+    return "if command -v cswap >/dev/null 2>&1; then printf '%s' 'cswap'; elif command -v claude-swap >/dev/null 2>&1; then printf '%s' 'claude-swap'; fi"
+}

@@ -21,7 +21,7 @@ Based on the original [plasma-claude-usage](https://github.com/izll/plasma-claud
 - **Local Cache**: Remembers last data on restart (up to 24h)
 - **Stale Detection**: Widget dims when data is outdated
 - **Error Handling**: Clear messages when not logged in, token expired, or rate limited
-- **Account Switcher**: Optional popup selector for `cswap`/`claude-swap` managed accounts
+- **Account Switcher**: Optional popup selector for `claude-swap` managed accounts
 - **Custom API Support**: Optional proxy/gateway with custom base URL and API key
 - **15 Languages**: EN, HU, DE, FR, ES, IT, PT, RU, PL, NL, TR, JA, KO, ZH-CN, ZH-TW
 - **No Bundled Dependencies**: Pure QML; account switching uses an already-installed optional CLI
@@ -30,6 +30,7 @@ Based on the original [plasma-claude-usage](https://github.com/izll/plasma-claud
 
 - KDE Plasma 6.0 or later
 - Claude Code CLI installed and logged in
+- Optional: [`claude-swap`](https://github.com/realiti4/claude-swap) for account switching
 
 ## Installation
 
@@ -82,13 +83,13 @@ When a base URL is configured, the widget authenticates with `x-api-key` instead
 
 ### Account Switching (optional)
 
-If you manage multiple Claude Code accounts with `claude-swap`, the popup can switch between them directly. The widget assumes the `cswap` command is already installed and reads accounts with `cswap --list`, switches with `cswap --switch-to <account-number>`, and can save the currently logged-in account with `cswap --add-account`.
+If you manage multiple Claude Code accounts with `claude-swap`, the popup can switch between them directly. The widget uses the installed `claude-swap` command to read accounts with `--list`, switch with `--switch-to <account-number>`, and save the currently logged-in account with `--add-account`.
 
-The **Login & add** button opens a terminal and runs `claude auth login && cswap --add-account`, because Claude login is interactive. Finish the login in that terminal, then refresh the account selector.
+The **Login & add** button opens a terminal and runs `claude auth login && <detected-command> --add-account`, because Claude login is interactive. Finish the login in that terminal, then refresh the account selector.
 
 | Setting | Description |
 |---|---|
-| **Command** | Account switch command, default `cswap` |
+| **Command** | Optional `claude-swap` command override; leave empty for automatic detection |
 
 The selector is only shown in the default OAuth credentials mode. It is hidden when a custom API base URL is configured.
 

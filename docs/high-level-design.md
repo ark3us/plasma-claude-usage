@@ -13,7 +13,7 @@ graph TD
     C --> S[KConfig schema]
     S --> W
     W --> F[Claude credentials file]
-    W --> CS[cswap account switcher]
+    W --> CS[claude-swap account switcher]
     W --> A[Anthropic usage API]
     W --> L[Local cache JSON]
     W --> T[Translation map]
@@ -30,7 +30,7 @@ graph TD
 
 - **Pure QML runtime:** The widget avoids bundled native helpers and uses `Plasma5Support.DataSource` executable commands plus `XMLHttpRequest` in `contents/ui/main.qml`.
 - **Credential fallback model:** Empty `baseUrl` means "read Claude Code OAuth credentials"; configured `baseUrl` switches to API-key auth for proxy/gateway users.
-- **Optional account switching:** In OAuth mode, the popup can call an installed `cswap`-compatible command to list, add, and switch Claude Code accounts, then reload credentials.
+- **Optional account switching:** In OAuth mode, the popup can call an installed `claude-swap` command to list, add, and switch Claude Code accounts, then reload credentials.
 - **Rate-limit resilience:** The runtime respects `retry-after` when present and falls back to capped 5/10/15 minute backoff while dimming stale data.
 - **Local cache-first startup:** Cached usage data under `$HOME/.local/share/claude-usage-cache.json` can populate the UI before the next successful API call.
 
@@ -61,7 +61,7 @@ sequenceDiagram
 ## Cross-Cutting Concerns
 
 - **Authentication:** OAuth token from `$HOME/.claude/.credentials.json` by default; `x-api-key` when `baseUrl` is configured -> `contents/ui/main.qml:loadCredentials()`, `contents/ui/main.qml:fetchUsageFromApi()`
-- **Account switching:** Optional `cswap --list`, `cswap --add-account`, and `cswap --switch-to` integration is treated as an external command; the widget never reads `claude-swap` storage directly.
+- **Account switching:** Optional `claude-swap --list`, `claude-swap --add-account`, and `claude-swap --switch-to` integration is treated as an external command; the widget never reads `claude-swap` storage directly.
 - **Rate limits:** 429 responses set `hasRateLimitError`, read `retry-after`, start `rateLimitRetryTimer`, and pause the normal refresh timer -> `contents/ui/main.qml:rateLimitBackoffMs`
 - **Internationalization:** A QML translation table maps configured language or system locale to 15 supported locales -> `contents/ui/Translations.qml:tr()`
 - **Error handling:** Separate UI states cover missing login/config, token expiry, invalid API key, endpoint not found, parse errors, generic API errors, and rate limits -> `contents/ui/main.qml:fetchUsageFromApi()`

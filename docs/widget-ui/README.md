@@ -18,7 +18,7 @@ graph TD
     Main --> API[/api/oauth/usage]
     Main --> Cache[~/.local/share/claude-usage-cache.json]
 Main --> Claude[claude --version and claude launcher]
-Main --> Cswap[cswap account switcher]
+Main --> Cswap[claude-swap account switcher]
     Main --> Icons[Icon theme installer]
     Main --> Plasma[Plasma panel and popup]
 ```
@@ -35,12 +35,12 @@ Main --> Cswap[cswap account switcher]
 - `contents/ui/main.qml:loadCredentials()` - Selects custom API-key mode or default Claude Code OAuth credential mode.
 - `contents/ui/main.qml:fetchUsageFromApi()` - Calls `/api/oauth/usage`, parses success payloads, and maps HTTP errors into UI state.
 - `contents/ui/main.qml:saveCache()` - Persists the last successful usage snapshot to a local JSON cache.
-- `contents/ui/main.qml:loadAccountSwitchAccounts()` - Reads `cswap --list` output for the popup account selector.
-- `contents/ui/main.qml:switchAccount()` - Runs `cswap --switch-to` and refreshes credentials and usage.
-- `contents/ui/main.qml:addCurrentAccount()` - Runs `cswap --add-account` for the currently logged-in Claude account.
-- `contents/ui/main.qml:loginAndAddAccount()` - Opens a terminal for interactive `claude auth login`, then runs `cswap --add-account`.
+- `contents/ui/main.qml:loadAccountSwitchAccounts()` - Detects the installed `claude-swap` command, then reads `--list` output for the popup account selector.
+- `contents/ui/main.qml:switchAccount()` - Runs `claude-swap --switch-to` and refreshes credentials and usage.
+- `contents/ui/main.qml:addCurrentAccount()` - Runs `claude-swap --add-account` for the currently logged-in Claude account.
+- `contents/ui/main.qml:loginAndAddAccount()` - Opens a terminal for interactive `claude auth login`, then runs `claude-swap --add-account`.
 - `contents/ui/main.qml:refresh()` - Clears token/rate-limit state and starts a new credential/API cycle.
-- `contents/ui/accountSwitching.js:parseCswapList()` - Parses account rows from `cswap --list` output.
+- `contents/ui/accountSwitching.js:parseCswapList()` - Parses account rows from `claude-swap --list` output.
 - `contents/ui/main.qml:drawCircularProgress()` - Shared Canvas drawing helper for compact circular panel style.
 - `contents/ui/main.qml:getUsageColor()` - Maps usage thresholds to Plasma theme colors.
 - `contents/ui/main.qml:formatTimeRemaining()` - Formats reset countdown labels.
@@ -108,18 +108,18 @@ sequenceDiagram
 | `panelStyle` | Chooses text, circular Canvas, or bar display |
 | `showSession`, `showWeekly`, `showSonnet`, `showIcon` | Controls compact panel and tooltip metrics |
 | `baseUrl`, `apiKey` | Switches from OAuth credentials to custom API-key mode |
-| `accountSwitchCommand` | Command prefix for cswap-compatible account switching |
+| `accountSwitchCommand` | Optional `claude-swap` command override; empty enables automatic detection |
 | `backgroundOpacity` | Applies only when the widget is placed on the desktop, not in a panel |
 
 ## Dependencies
 
 - **Internal:** [Configuration](../configuration/), [Package Assets](../package-assets/)
-- **External:** KDE Plasma/Kirigami runtime, Claude Code credentials, Claude CLI, optional `cswap`, Anthropic usage API, optional custom API gateway
+- **External:** KDE Plasma/Kirigami runtime, Claude Code credentials, Claude CLI, optional `claude-swap`, Anthropic usage API, optional custom API gateway
 
 ## Error Handling
 
 - Missing credentials or malformed credential JSON sets "Not logged in" state.
-- Missing or unparsable `cswap --list` output, or failed `cswap --add-account`, shows an account-switching error without blocking usage polling.
+- Missing or unparsable `claude-swap --list` output, or failed `claude-swap --add-account`, shows an account-switching error without blocking usage polling.
 - Missing custom API key sets "API key not configured" state.
 - HTTP 401 maps to "Invalid API key" in custom API mode or token-expired state in OAuth mode.
 - HTTP 404 maps to "Endpoint not found" in custom API mode, otherwise generic API error.

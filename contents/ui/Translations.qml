@@ -74,9 +74,10 @@ QtObject {
             "Adding account...": "Adding account...",
             "Account added": "Account added",
             "Finish login, then refresh accounts": "Finish login, then refresh accounts",
+            "Install claude-swap or set a command": "Install claude-swap or set a command",
             "Account switching": "Account switching",
             "Command:": "Command:",
-            "Used for cswap-compatible account switching": "Used for cswap-compatible account switching"
+            "Leave empty to auto-detect claude-swap": "Leave empty to auto-detect claude-swap"
         },
         "hu_HU": {
             "Claude Usage": "Claude használat",
@@ -332,9 +333,10 @@ QtObject {
             "Adding account...": "Aggiunta account...",
             "Account added": "Account aggiunto",
             "Finish login, then refresh accounts": "Completa il login, poi aggiorna gli account",
+            "Install claude-swap or set a command": "Installa claude-swap o imposta un comando",
             "Account switching": "Cambio account",
             "Command:": "Comando:",
-            "Used for cswap-compatible account switching": "Usato per il cambio account compatibile con cswap"
+            "Leave empty to auto-detect claude-swap": "Lascia vuoto per rilevare claude-swap"
         },
         "pt_BR": {
             "Claude Usage": "Uso do Claude",

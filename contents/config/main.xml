@@ -47,8 +47,8 @@
             <default></default>
         </entry>
         <entry name="accountSwitchCommand" type="String">
-            <label>Account switch command</label>
-            <default>cswap</default>
+            <label>Account switch command override</label>
+            <default></default>
         </entry>
         <entry name="backgroundOpacity" type="Double">
             <label>Background opacity (0.0 = transparent, 1.0 = opaque)</label>

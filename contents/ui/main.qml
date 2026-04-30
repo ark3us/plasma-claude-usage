@@ -36,6 +36,7 @@ PlasmoidItem {
     property bool accountSwitching: false
     property bool accountAdding: false
     property string accountSwitchStatus: ""
+    property string accountSwitchCommand: ""
     property bool isLoading: false
     property var sessionResetTime: null
     property var weeklyResetTime: null
@@ -282,6 +283,26 @@ PlasmoidItem {
     }
 
     Plasma5Support.DataSource {
+        id: accountSwitchCommandDetector
+        engine: "executable"
+        connectedSources: []
+
+        onNewData: function(sourceName, data) {
+            var command = (data["stdout"] || "").trim()
+            disconnectSource(sourceName)
+
+            root.accountSwitchCommand = command
+            if (!command) {
+                root.accountSwitchLoading = false
+                root.accountSwitchError = i18n.tr("Install claude-swap or set a command")
+                return
+            }
+
+            runAccountListCommand(command)
+        }
+    }
+
+    Plasma5Support.DataSource {
         id: accountSwitcher
         engine: "executable"
         connectedSources: []
@@ -329,8 +350,7 @@ PlasmoidItem {
     }
 
     function getAccountSwitchCommand() {
-        var command = (Plasmoid.configuration.accountSwitchCommand || "cswap").trim()
-        return command || "cswap"
+        return root.accountSwitchCommand || (Plasmoid.configuration.accountSwitchCommand || "").trim()
     }
 
     function loadAccountSwitchAccounts() {
@@ -340,7 +360,11 @@ PlasmoidItem {
 
         root.accountSwitchLoading = true
         root.accountSwitchError = ""
-        accountSwitchListReader.connectSource("printf 'n\\n' | " + getAccountSwitchCommand() + " --list 2>&1")
+        accountSwitchCommandDetector.connectSource(AccountSwitching.buildCommandDetector(Plasmoid.configuration.accountSwitchCommand || ""))
+    }
+
+    function runAccountListCommand(command) {
+        accountSwitchListReader.connectSource("printf 'n\\n' | " + command + " --list 2>&1")
     }
 
     function switchAccount(accountId) {
@@ -348,10 +372,16 @@ PlasmoidItem {
             return
         }
 
+        var command = getAccountSwitchCommand()
+        if (!command) {
+            root.accountSwitchError = i18n.tr("Install claude-swap or set a command")
+            return
+        }
+
         root.accountSwitching = true
         root.accountSwitchError = ""
         root.accountSwitchStatus = ""
-        accountSwitcher.connectSource(getAccountSwitchCommand() + " --switch-to " + AccountSwitching.shellQuote(accountId) + " 2>&1")
+        accountSwitcher.connectSource(command + " --switch-to " + AccountSwitching.shellQuote(accountId) + " 2>&1")
     }
 
     function addCurrentAccount() {
@@ -359,10 +389,16 @@ PlasmoidItem {
             return
         }
 
+        var command = getAccountSwitchCommand()
+        if (!command) {
+            root.accountSwitchError = i18n.tr("Install claude-swap or set a command")
+            return
+        }
+
         root.accountAdding = true
         root.accountSwitchError = ""
         root.accountSwitchStatus = ""
-        accountAdder.connectSource(getAccountSwitchCommand() + " --add-account 2>&1")
+        accountAdder.connectSource(command + " --add-account 2>&1")
     }
 
     function launchTerminalCommand(command) {
@@ -376,9 +412,15 @@ PlasmoidItem {
     }
 
     function loginAndAddAccount() {
+        var command = getAccountSwitchCommand()
+        if (!command) {
+            root.accountSwitchError = i18n.tr("Install claude-swap or set a command")
+            return
+        }
+
         root.accountSwitchError = ""
         root.accountSwitchStatus = i18n.tr("Finish login, then refresh accounts")
-        launchTerminalCommand(AccountSwitching.buildLoginAndAddCommand(getAccountSwitchCommand()))
+        launchTerminalCommand(AccountSwitching.buildLoginAndAddCommand(command))
     }
 
     function loadCredentials() {

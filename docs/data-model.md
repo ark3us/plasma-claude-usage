@@ -32,7 +32,7 @@ erDiagram
 | `showSonnet` | Bool | `false` | Sonnet weekly metric visibility |
 | `baseUrl` | String | empty | Optional custom API root URL |
 | `apiKey` | String | empty | Optional custom API key |
-| `accountSwitchCommand` | String | `cswap` | Command used for optional account switching |
+| `accountSwitchCommand` | String | empty | Optional `claude-swap` command override; empty enables automatic detection |
 | `backgroundOpacity` | Double | `1.0` | Desktop background opacity |
 
 ### Claude Code Credentials
