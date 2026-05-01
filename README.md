@@ -33,6 +33,8 @@ Based on the original [plasma-claude-usage](https://github.com/izll/plasma-claud
 
 ### From KDE Store
 
+Install from the [Claude Usage Switcher KDE Store page](https://store.kde.org/p/2357774).
+
 1. Right-click on your panel
 2. Select "Add Widgets..."
 3. Click "Get New Widgets..." > "Download New Plasma Widgets..."

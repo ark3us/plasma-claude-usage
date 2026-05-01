@@ -59,7 +59,8 @@ sequenceDiagram
 - License: `GPL-3.0-or-later`
 - Category: `System Information`
 - Display name: `Claude Usage Switcher`
-- Website: `https://github.com/ark3us/plasma-claude-usage`
+- Website: `https://store.kde.org/p/2357774`
+- Source repository: `https://github.com/ark3us/plasma-claude-usage`
 - Original widget credit: `https://github.com/izll/plasma-claude-usage`
 - Account switching credit: `https://github.com/realiti4/claude-swap`
 - Local author credit: `https://github.com/ark3us/plasma-claude-usage`

@@ -2,7 +2,7 @@
 
 # Deployment
 
-The widget is deployed as a KDE Plasma applet. Distribution paths are KDE Store/KPackage installation, the checked-in `.plasmoid` archive, or the local `install.sh` helper.
+The widget is deployed as a KDE Plasma applet. Distribution paths are the [KDE Store page](https://store.kde.org/p/2357774), KPackage installation, the checked-in `.plasmoid` archive, or the local `install.sh` helper.
 
 ## Build
 
@@ -40,7 +40,7 @@ graph TD
 ## CI/CD
 
 - No CI/CD workflow is present in the repository.
-- Release packaging is documented in `README.md`: create the `.plasmoid` archive with `zip -r claude-usage-switcher.plasmoid metadata.json contents/`, then upload to KDE Store.
+- Release packaging is documented in `README.md`: create the `.plasmoid` archive with `zip -r claude-usage-switcher.plasmoid metadata.json contents/`, then upload to the [KDE Store page](https://store.kde.org/p/2357774).
 
 ## Monitoring
 
