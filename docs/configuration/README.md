@@ -54,7 +54,7 @@ sequenceDiagram
 | `language` | String | `system` | `contents/ui/Translations.qml:getEffectiveLanguage()` |
 | `refreshInterval` | Int | `5` | `contents/ui/main.qml:refreshTimer` |
 | `panelLayout` | String | `horizontal` | `contents/ui/main.qml:isVerticalLayout` |
-| `showIcon` | Bool | `true` | `contents/ui/main.qml:compactRepresentation` |
+| `showIcon` | Bool | `false` | `contents/ui/main.qml:compactRepresentation` |
 | `panelStyle` | String | `text` | `contents/ui/main.qml:compactRepresentation` |
 | `showSession` | Bool | `true` | Panel metric visibility and tooltip |
 | `showWeekly` | Bool | `true` | Panel metric visibility and tooltip |

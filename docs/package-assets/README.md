@@ -15,7 +15,7 @@ graph TD
     Metadata[metadata.json] --> Plasma[KDE Plasma Widget Picker]
     Icons[contents/icons/] --> Plasma
     Screenshot[contents/screenshot.png] --> Plasma
-    Archive[claude-account-usage.plasmoid] --> Installer[kpackagetool6]
+    Archive[claude-usage-switcher.plasmoid] --> Installer[kpackagetool6]
     Install[install.sh] --> LocalDir[~/.local/share/plasma/plasmoids/]
 ```
 
@@ -23,14 +23,14 @@ graph TD
 
 - `metadata.json` - KPackage metadata, plugin id, version, icon, license
 - `install.sh` - Copies package files into the local Plasma plasmoids directory
-- `claude-account-usage.plasmoid` - Packaged widget archive
+- `claude-usage-switcher.plasmoid` - Packaged widget archive
 - `contents/icons/` - Runtime and package icons
 - `contents/screenshot.png`, `screenshots/` - Widget picker and README screenshots
 - `README.md` - User-facing install, configuration, troubleshooting, and changelog
 
 ## Key Interfaces / Types
 
-- `metadata.json:KPlugin.Id` - Plasma plugin id: `org.kde.plasma.claudeaccountusage`.
+- `metadata.json:KPlugin.Id` - Plasma plugin id: `org.kde.plasma.claudeusageswitcher`.
 - `metadata.json:KPlugin.Version` - Published widget version: `1.3.6`.
 - `metadata.json:X-Plasma-API-Minimum-Version` - Requires Plasma API `6.0`.
 - `install.sh:PLUGIN_ID` - Must stay aligned with `metadata.json:KPlugin.Id`.
@@ -53,12 +53,12 @@ sequenceDiagram
 
 ## Configuration
 
-- Plugin id: `org.kde.plasma.claudeaccountusage`
+- Plugin id: `org.kde.plasma.claudeusageswitcher`
 - KPackage structure: `Plasma/Applet`
 - Minimum Plasma API: `6.0`
 - License: `GPL-3.0-or-later`
 - Category: `System Information`
-- Display name: `Claude Account Usage`
+- Display name: `Claude Usage Switcher`
 - Website: `https://github.com/ark3us/plasma-claude-usage`
 - Original widget credit: `https://github.com/izll/plasma-claude-usage`
 - Account switching credit: `https://github.com/realiti4/claude-swap`

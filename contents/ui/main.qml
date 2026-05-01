@@ -882,10 +882,9 @@ PlasmoidItem {
         id: popupRoot
 
         readonly property real contentHeight: popupContent.implicitHeight + Kirigami.Units.largeSpacing * 2
-
-        Layout.minimumWidth: Kirigami.Units.gridUnit * 14
+        Layout.minimumWidth: Kirigami.Units.gridUnit * 17
         Layout.minimumHeight: Math.max(Kirigami.Units.gridUnit * 22, popupRoot.contentHeight)
-        Layout.preferredWidth: Kirigami.Units.gridUnit * 16
+        Layout.preferredWidth: Kirigami.Units.gridUnit * 18
         Layout.preferredHeight: popupRoot.contentHeight
 
         ColumnLayout {
@@ -899,11 +898,12 @@ PlasmoidItem {
             RowLayout {
                 Layout.fillWidth: true
                 PlasmaComponents.Label {
-                    text: i18n.tr("Claude Account Usage")
+                    text: i18n.tr("Claude Usage Switcher")
                     font.bold: true
                     font.pixelSize: Kirigami.Theme.defaultFont.pixelSize * 1.3
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
                 }
-                Item { Layout.fillWidth: true }
                 Rectangle {
                     Layout.preferredWidth: planLabel.implicitWidth + Kirigami.Units.smallSpacing * 2
                     Layout.preferredHeight: planLabel.implicitHeight + Kirigami.Units.smallSpacing
@@ -934,6 +934,7 @@ PlasmoidItem {
 
                     QQC2.ComboBox {
                         Layout.fillWidth: true
+                        Layout.minimumWidth: Kirigami.Units.gridUnit * 8
                         enabled: !root.accountSwitchLoading && !root.accountSwitching && !root.accountAdding && root.accountSwitchAccounts.length > 0
                         model: root.accountSwitchAccounts
                         textRole: "label"
@@ -1409,7 +1410,7 @@ PlasmoidItem {
     }
 
     Plasmoid.icon: "claude-usage-widget"
-    toolTipMainText: i18n.tr("Claude Account Usage")
+    toolTipMainText: i18n.tr("Claude Usage Switcher")
     toolTipSubText: {
         var parts = []
         if (Plasmoid.configuration.showSession !== false)

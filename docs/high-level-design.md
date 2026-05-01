@@ -2,7 +2,7 @@
 
 # High-Level Design
 
-Claude Account Usage is a KDE Plasma 6 applet based on the original [plasma-claude-usage](https://github.com/izll/plasma-claude-usage) widget. It is implemented in QML. The runtime is a single `PlasmoidItem` that reads Claude Code credentials or custom API settings, calls the Anthropic usage endpoint, caches the last successful response, and renders panel plus popup views.
+Claude Usage Switcher is a KDE Plasma 6 applet based on the original [plasma-claude-usage](https://github.com/izll/plasma-claude-usage) widget. It is implemented in QML. The runtime is a single `PlasmoidItem` that reads Claude Code credentials or custom API settings, calls the Anthropic usage endpoint, caches the last successful response, and renders panel plus popup views.
 
 ## Architecture Overview
 
@@ -24,7 +24,7 @@ graph TD
 
 - **Widget UI** - Runtime state, polling, auth, API calls, cache handling, rendering, and tooltips -> `contents/ui/main.qml`, `contents/ui/Translations.qml`
 - **Configuration** - Plasma settings category, Kirigami form controls, and persisted defaults -> `contents/config/config.qml`, `contents/ui/configGeneral.qml`, `contents/config/main.xml`
-- **Package Assets** - KPackage metadata, package archive, install helper, icon theme assets, and screenshots -> `metadata.json`, `claude-account-usage.plasmoid`, `install.sh`, `contents/icons/`, `screenshots/`
+- **Package Assets** - KPackage metadata, package archive, install helper, icon theme assets, and screenshots -> `metadata.json`, `claude-usage-switcher.plasmoid`, `install.sh`, `contents/icons/`, `screenshots/`
 
 ## Key Design Decisions
 

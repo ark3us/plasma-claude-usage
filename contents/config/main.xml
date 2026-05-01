@@ -20,10 +20,10 @@
         </entry>
         <entry name="showIcon" type="Bool">
             <label>Show Claude icon in panel</label>
-            <default>true</default>
+            <default>false</default>
         </entry>
         <entry name="panelStyle" type="String">
-            <label>Panel display style (text or circular)</label>
+            <label>Panel display style (text, circular, or bar)</label>
             <default>text</default>
         </entry>
         <entry name="showSession" type="Bool">

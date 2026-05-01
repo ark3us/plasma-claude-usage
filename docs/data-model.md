@@ -25,7 +25,7 @@ erDiagram
 | `language` | String | `system` | Translation selection |
 | `refreshInterval` | Int | `5` | Polling interval in minutes |
 | `panelLayout` | String | `horizontal` | Panel metric layout direction |
-| `showIcon` | Bool | `true` | Claude icon visibility in panel |
+| `showIcon` | Bool | `false` | Claude icon visibility in panel |
 | `panelStyle` | String | `text` | Compact display mode: text, circular, or bar |
 | `showSession` | Bool | `true` | Session metric visibility |
 | `showWeekly` | Bool | `true` | Weekly metric visibility |

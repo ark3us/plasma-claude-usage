@@ -17,7 +17,7 @@ QtObject {
 
     readonly property var strings: ({
         "en_US": {
-            "Claude Account Usage": "Claude Account Usage",
+            "Claude Usage Switcher": "Claude Usage Switcher",
             "Claude Usage": "Claude Usage",
             "Session (5hr)": "Session (5hr)",
             "Weekly (7day)": "Weekly (7day)",
@@ -276,7 +276,7 @@ QtObject {
             "Background opacity (desktop):": "Opacidad del fondo (escritorio):"
         },
         "it_IT": {
-            "Claude Account Usage": "Claude Account Usage",
+            "Claude Usage Switcher": "Claude Usage Switcher",
             "Claude Usage": "Utilizzo Claude",
             "Session (5hr)": "Sessione (5h)",
             "Weekly (7day)": "Settimanale (7gg)",

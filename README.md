@@ -1,4 +1,4 @@
-# Claude Account Usage Widget
+# Claude Usage Switcher Widget
 
 A KDE Plasma 6 widget that displays your Claude Code usage statistics and switches Claude accounts from the taskbar.
 
@@ -36,13 +36,13 @@ Based on the original [plasma-claude-usage](https://github.com/izll/plasma-claud
 1. Right-click on your panel
 2. Select "Add Widgets..."
 3. Click "Get New Widgets..." > "Download New Plasma Widgets..."
-4. Search for "Claude Account Usage"
+4. Search for "Claude Usage Switcher"
 5. Click Install
 
 ### Manual Installation
 
 ```bash
-kpackagetool6 -t Plasma/Applet -i claude-account-usage.plasmoid
+kpackagetool6 -t Plasma/Applet -i claude-usage-switcher.plasmoid
 ```
 
 ### From Source

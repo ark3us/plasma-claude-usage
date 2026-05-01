@@ -7,7 +7,7 @@ The widget is deployed as a KDE Plasma applet. Distribution paths are KDE Store/
 ## Build
 
 ```bash
-zip -r claude-account-usage.plasmoid metadata.json contents/
+zip -r claude-usage-switcher.plasmoid metadata.json contents/
 ```
 
 ## Run Locally
@@ -40,7 +40,7 @@ graph TD
 ## CI/CD
 
 - No CI/CD workflow is present in the repository.
-- Release packaging is documented in `README.md`: create the `.plasmoid` archive with `zip -r claude-account-usage.plasmoid metadata.json contents/`, then upload to KDE Store.
+- Release packaging is documented in `README.md`: create the `.plasmoid` archive with `zip -r claude-usage-switcher.plasmoid metadata.json contents/`, then upload to KDE Store.
 
 ## Monitoring
 
