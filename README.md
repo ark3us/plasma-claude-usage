@@ -4,12 +4,9 @@ A KDE Plasma 6 widget that displays your Claude Code usage statistics and switch
 
 Based on the original [plasma-claude-usage](https://github.com/izll/plasma-claude-usage) widget by izll, with optional account switching through [claude-swap](https://github.com/realiti4/claude-swap) by realiti4.
 
-![Popup](screenshots/popup.png)
-
 ## Features
 
 - **Compact Panel Display**: Shows session and weekly usage percentages right in your taskbar
-  ![Panel](screenshots/panel.png)
 - **Color-coded Indicators**: Green (<50%), Yellow (<80%), Red (≥80%)
 - **Detailed Popup**: Click to see full statistics
   - Session and weekly usage with progress bars
@@ -21,10 +18,10 @@ Based on the original [plasma-claude-usage](https://github.com/izll/plasma-claud
 - **Local Cache**: Remembers last data on restart (up to 24h)
 - **Stale Detection**: Widget dims when data is outdated
 - **Error Handling**: Clear messages when not logged in, token expired, or rate limited
-- **Account Switcher**: Optional popup selector for `claude-swap` managed accounts
 - **Custom API Support**: Optional proxy/gateway with custom base URL and API key
 - **15 Languages**: EN, HU, DE, FR, ES, IT, PT, RU, PL, NL, TR, JA, KO, ZH-CN, ZH-TW
 - **No Bundled Dependencies**: Pure QML; account switching uses an already-installed optional CLI
+- **New: Account Switcher**: Optional popup selector for `claude-swap` managed accounts
 
 ## Requirements
 
@@ -85,7 +82,7 @@ When a base URL is configured, the widget authenticates with `x-api-key` instead
 
 If you manage multiple Claude Code accounts with `claude-swap`, the popup can switch between them directly. The widget uses the installed `claude-swap` command to read accounts with `--list`, switch with `--switch-to <account-number>`, and save the currently logged-in account with `--add-account`.
 
-The **Login & add** button opens a terminal and runs `claude auth login && <detected-command> --add-account`, because Claude login is interactive. Finish the login in that terminal, then refresh the account selector.
+The **Login & add** button opens a terminal and runs `claude auth login && claude-swap --add-account`, because Claude login is interactive. Finish the login in that terminal, then refresh the account selector.
 
 | Setting | Description |
 |---|---|

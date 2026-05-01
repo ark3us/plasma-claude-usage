@@ -879,12 +879,18 @@ PlasmoidItem {
 
     // Full representation (popup)
     fullRepresentation: Item {
+        id: popupRoot
+
+        readonly property real contentHeight: popupContent.implicitHeight + Kirigami.Units.largeSpacing * 2
+
         Layout.minimumWidth: Kirigami.Units.gridUnit * 14
-        Layout.minimumHeight: Kirigami.Units.gridUnit * 18
+        Layout.minimumHeight: Math.max(Kirigami.Units.gridUnit * 22, popupRoot.contentHeight)
         Layout.preferredWidth: Kirigami.Units.gridUnit * 16
-        Layout.preferredHeight: Kirigami.Units.gridUnit * 20
+        Layout.preferredHeight: popupRoot.contentHeight
 
         ColumnLayout {
+            id: popupContent
+
             anchors.fill: parent
             anchors.margins: Kirigami.Units.largeSpacing
             spacing: Kirigami.Units.mediumSpacing
@@ -955,6 +961,7 @@ PlasmoidItem {
                     PlasmaComponents.Button {
                         icon.name: "list-add"
                         text: i18n.tr("Add current")
+                        Layout.fillWidth: true
                         enabled: !root.accountSwitchLoading && !root.accountSwitching && !root.accountAdding
                         onClicked: root.addCurrentAccount()
                     }
@@ -962,6 +969,7 @@ PlasmoidItem {
                     PlasmaComponents.Button {
                         icon.name: "utilities-terminal"
                         text: i18n.tr("Login & add")
+                        Layout.fillWidth: true
                         enabled: !root.accountSwitchLoading && !root.accountSwitching && !root.accountAdding
                         onClicked: root.loginAndAddAccount()
                     }
