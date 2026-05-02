@@ -559,6 +559,8 @@ PlasmoidItem {
 
     // Compact representation (panel)
     readonly property bool isVerticalLayout: Plasmoid.configuration.panelLayout === "vertical"
+    // Keep bar metrics measurable during Plasma startup/reload before usageRow has a height.
+    readonly property int compactBarHeight: Math.max(Kirigami.Units.iconSizes.medium, Kirigami.Theme.defaultFont.pixelSize + Kirigami.Units.smallSpacing * 2)
 
     compactRepresentation: Item {
         Layout.minimumWidth: usageRow.implicitWidth + Kirigami.Units.largeSpacing * 2
@@ -772,7 +774,7 @@ PlasmoidItem {
             Item {
                 visible: Plasmoid.configuration.panelStyle === "bar" && (Plasmoid.configuration.showSession !== false) && (root.errorMsg === "" || root.hasTokenError || root.hasRateLimitError)
                 Layout.preferredWidth: 32
-                Layout.preferredHeight: parent.height
+                Layout.preferredHeight: root.compactBarHeight
                 opacity: (root.hasTokenError || root.hasRateLimitError) ? 0.5 : root.isStale ? 0.6 : 1.0
 
                 Rectangle {
@@ -805,7 +807,7 @@ PlasmoidItem {
             Item {
                 visible: Plasmoid.configuration.panelStyle === "bar" && (Plasmoid.configuration.showWeekly !== false) && (root.errorMsg === "" || root.hasTokenError || root.hasRateLimitError)
                 Layout.preferredWidth: 32
-                Layout.preferredHeight: parent.height
+                Layout.preferredHeight: root.compactBarHeight
                 opacity: (root.hasTokenError || root.hasRateLimitError) ? 0.5 : root.isStale ? 0.6 : 1.0
 
                 Rectangle {
@@ -838,7 +840,7 @@ PlasmoidItem {
             Item {
                 visible: Plasmoid.configuration.panelStyle === "bar" && (Plasmoid.configuration.showSonnet === true) && (root.errorMsg === "" || root.hasTokenError || root.hasRateLimitError)
                 Layout.preferredWidth: 32
-                Layout.preferredHeight: parent.height
+                Layout.preferredHeight: root.compactBarHeight
                 opacity: (root.hasTokenError || root.hasRateLimitError) ? 0.5 : root.isStale ? 0.6 : 1.0
 
                 Rectangle {
