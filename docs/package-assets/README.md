@@ -31,7 +31,7 @@ graph TD
 ## Key Interfaces / Types
 
 - `metadata.json:KPlugin.Id` - Plasma plugin id: `org.kde.plasma.claudeusageswitcher`.
-- `metadata.json:KPlugin.Version` - Published widget version: `1.3.7`.
+- `metadata.json:KPlugin.Version` - Published widget version: `1.3.8`.
 - `metadata.json:X-Plasma-API-Minimum-Version` - Requires Plasma API `6.0`.
 - `install.sh:PLUGIN_ID` - Must stay aligned with `metadata.json:KPlugin.Id`.
 - `contents/ui/main.qml:Component.onCompleted` - Copies `claude-usage-widget.svg` into the user icon theme for Plasma about/picker surfaces.

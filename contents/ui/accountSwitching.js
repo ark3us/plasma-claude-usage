@@ -44,5 +44,13 @@ function buildCommandDetector(configuredCommand) {
     if (command) {
         return "printf '%s' " + shellQuote(command)
     }
-    return "if command -v cswap >/dev/null 2>&1; then printf '%s' 'cswap'; elif command -v claude-swap >/dev/null 2>&1; then printf '%s' 'claude-swap'; fi"
+    return "if command -v cswap >/dev/null 2>&1; then command -v cswap"
+        + "; elif command -v claude-swap >/dev/null 2>&1; then command -v claude-swap"
+        + "; elif [ -x \"$HOME/.local/bin/cswap\" ]; then printf '%s' \"$HOME/.local/bin/cswap\""
+        + "; elif [ -x \"$HOME/.local/bin/claude-swap\" ]; then printf '%s' \"$HOME/.local/bin/claude-swap\""
+        + "; elif [ -x \"$HOME/bin/cswap\" ]; then printf '%s' \"$HOME/bin/cswap\""
+        + "; elif [ -x \"$HOME/bin/claude-swap\" ]; then printf '%s' \"$HOME/bin/claude-swap\""
+        + "; elif [ -x \"$HOME/.cargo/bin/cswap\" ]; then printf '%s' \"$HOME/.cargo/bin/cswap\""
+        + "; elif [ -x \"$HOME/.cargo/bin/claude-swap\" ]; then printf '%s' \"$HOME/.cargo/bin/claude-swap\""
+        + "; fi"
 }

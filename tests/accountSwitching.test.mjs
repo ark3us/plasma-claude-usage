@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import vm from "node:vm";
 import test from "node:test";
 
@@ -67,9 +70,28 @@ test("buildCommandDetector prefers configured command when set", () => {
 
 test("buildCommandDetector detects cswap then claude-swap by default", () => {
     const { buildCommandDetector } = loadHelper();
+    const detector = buildCommandDetector("");
 
-    assert.equal(
-        buildCommandDetector(""),
-        "if command -v cswap >/dev/null 2>&1; then printf '%s' 'cswap'; elif command -v claude-swap >/dev/null 2>&1; then printf '%s' 'claude-swap'; fi"
-    );
+    assert.match(detector, /command -v cswap/);
+    assert.match(detector, /command -v claude-swap/);
+    assert.match(detector, /\$HOME\/\.local\/bin\/cswap/);
+    assert.match(detector, /\$HOME\/\.local\/bin\/claude-swap/);
+});
+
+test("buildCommandDetector finds user-local claude-swap with a minimal Plasma PATH", () => {
+    const { buildCommandDetector } = loadHelper();
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), "claude-swap-home-"));
+    const binDir = path.join(home, ".local", "bin");
+    const commandPath = path.join(binDir, "claude-swap");
+
+    fs.mkdirSync(binDir, { recursive: true });
+    fs.writeFileSync(commandPath, "#!/bin/sh\nexit 0\n");
+    fs.chmodSync(commandPath, 0o755);
+
+    const output = execFileSync("sh", ["-c", buildCommandDetector("")], {
+        encoding: "utf8",
+        env: { HOME: home, PATH: "/usr/bin:/bin" },
+    });
+
+    assert.equal(output, commandPath);
 });
